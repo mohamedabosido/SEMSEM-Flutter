@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "62947264007",
+    "firebase_url": "https://tokoto-696e3-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "tokoto-696e3",
+    "storage_bucket": "tokoto-696e3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:62947264007:android:e3ce512be8b3004f378ca2",
+        "android_client_info": {
+          "package_name": "com.mo7amedsido.tokoto"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "62947264007-f6khdfnhgp616plfc7tf3vmal17hrva1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mo7amedsido.tokoto",
+            "certificate_hash": "363dbbbf1939bce9d652af9d33e02d09f0f98170"
+          }
+        },
+        {
+          "client_id": "62947264007-osq7r23tslt2h81hcsibs40ts1nlrnie.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAAaOvaZ2CRPgybmOlVXxPixj6WjxUMO-A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "62947264007-osq7r23tslt2h81hcsibs40ts1nlrnie.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "62947264007-upmvj259aq5to313arr2biif9cfqmbu4.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.mo7amedsido.tokoto"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
