@@ -145,7 +145,12 @@ class _SignUpScreenState extends State<SignUpScreen> with Helpers {
                         const SizedBox(width: kDefaultPadding / 3),
                         GestureDetector(
                           onTap: () async {
-                            FbAuthController().loginWithFacebook();
+                            setState(() {
+                              loading = true;
+                            });
+                            if (await FbAuthController()
+                                .loginWithFacebook(context)) {
+                            }
                           },
                           child: CircleAvatar(
                             radius: 30,

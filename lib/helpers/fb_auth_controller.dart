@@ -126,13 +126,68 @@ class FbAuthController with Helpers {
     return false;
   }
 
-  void loginWithFacebook() async {
+  Future<bool> loginWithFacebook(context) async {
     final LoginResult loginResult = await facebookAuth.login();
     final OAuthCredential facebookAuthCredential =
         FacebookAuthProvider.credential(loginResult.accessToken!.token);
 
-    firebaseAuth.signInWithCredential(facebookAuthCredential);
+    await firebaseAuth.signInWithCredential(facebookAuthCredential);
+    final userData = await FacebookAuth.instance.getUserData();
+
+    final snapshot = await firestore
+        .collection('users')
+        .doc(firebaseAuth.currentUser!.uid)
+        .get();
+    if (!snapshot.exists) {
+      firestore.collection('users').doc(firebaseAuth.currentUser!.uid).set({
+        'fName': userData['name'],
+        'lName': '',
+        'address': '',
+        'phone': '',
+      });
+      await UserApiController().register(
+        id: firebaseAuth.currentUser!.uid,
+        email: userData['email'],
+        fName: userData['name'],
+        lName: userData['name'],
+        phone: 'Phone',
+        address: 'Address',
+        password: '12345678',
+        confirmPassword: '12345678',
+      );
+      UserModel user = UserModel(
+        id: firebaseAuth.currentUser!.uid,
+        email: userData['email'],
+        fName: userData['name'],
+        lName: '',
+        phone: '',
+        address: '',
+      );
+      UserPreferencesController().saveUser(user: user);
+      Navigator.pushReplacementNamed(context, '/main_screen');
+      return true;
+    } else {
+      var userCredential = firebaseAuth.currentUser;
+      firestore
+          .collection('users')
+          .doc(userCredential!.uid)
+          .get()
+          .then((value) {
+        UserModel user = UserModel(
+          id: userCredential.uid,
+          fName: value.get('fName'),
+          lName: value.get('lName'),
+          email: userCredential.email!,
+          phone: value.get('phone'),
+          address: value.get('address'),
+        );
+        UserPreferencesController().saveUser(user: user);
+        Navigator.pushReplacementNamed(context, '/main_screen');
+      });
+      return true;
+    }
   }
+
 
   Future<bool> register({
     required BuildContext context,
@@ -170,7 +225,8 @@ class FbAuthController with Helpers {
       showSnackBar(
           context: context, message: e.message.toString(), error: true);
     } catch (e) {
-      showSnackBar(context: context, message: 'Something Wrong, Please try later');
+      showSnackBar(
+          context: context, message: 'Something Wrong, Please try later');
     }
     return false;
   }
