@@ -6,10 +6,7 @@ import 'package:tokoto/constant/constant.dart';
 import 'package:tokoto/widgets/product_card.dart';
 
 class SearchScreen extends ConsumerWidget {
-  final TextEditingController controller = TextEditingController();
-
-  SearchScreen({Key? key}) : super(key: key);
-
+  const SearchScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -18,29 +15,38 @@ class SearchScreen extends ConsumerWidget {
       padding: const EdgeInsets.all(kDefaultPadding),
       child: Column(
         children: [
-          TextField(
+          TextFormField(
+            initialValue: ref.watch(keywordProvider),
             textInputAction: TextInputAction.search,
-            controller: controller,
+            // controller: controller,
             onChanged: (String value) {
-                ref.read(keywordProvider.notifier).state = value;
+              ref.read(keywordProvider.notifier).state = value;
             },
-            style:  TextStyle(
+            style: TextStyle(
               color: Theme.of(context).textTheme.bodyText1?.color,
               fontSize: 18,
             ),
             decoration: InputDecoration(
-              prefixIcon:  Icon(
+              prefixIcon: Icon(
                 Icons.search,
-                color: Theme.of(context).textTheme.bodyText1?.color?.withOpacity(0.6),
+                color: Theme.of(context)
+                    .textTheme
+                    .bodyText1
+                    ?.color
+                    ?.withOpacity(0.6),
                 size: 30,
               ),
               hintText: 'Search product',
-              hintStyle:  TextStyle(
+              hintStyle: TextStyle(
                 fontSize: 18,
-                color: Theme.of(context).textTheme.bodyText1?.color?.withOpacity(0.6),
+                color: Theme.of(context)
+                    .textTheme
+                    .bodyText1
+                    ?.color
+                    ?.withOpacity(0.6),
               ),
               filled: true,
-              fillColor:Theme.of(context).backgroundColor,
+              fillColor: Theme.of(context).backgroundColor,
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(15),
                 borderSide: BorderSide.none,
