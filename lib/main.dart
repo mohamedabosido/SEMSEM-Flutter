@@ -22,6 +22,7 @@ import 'package:tokoto/screens/auth/sign_in_screen.dart';
 import 'package:tokoto/screens/auth/sign_up_screen.dart';
 import 'package:tokoto/screens/on_boarding_screen.dart';
 import 'package:flutter/services.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await UserPreferencesController().initSharePreferences();
