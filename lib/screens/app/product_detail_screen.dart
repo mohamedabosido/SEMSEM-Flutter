@@ -312,59 +312,119 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                   ),
                                 ),
                               ),
-                              Row(
-                                children: [
-                                  GestureDetector(
-                                    onTap: () {
-                                      setState(() {
-                                        if (counter > 1) {
-                                          counter--;
-                                        }
-                                      });
-                                    },
-                                    child: CircleAvatar(
-                                      radius: 18,
-                                      backgroundColor: Theme.of(context)
-                                          .scaffoldBackgroundColor,
-                                      child: Icon(
-                                        Icons.remove,
-                                        color:
-                                            Theme.of(context).iconTheme.color,
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(width: kDefaultPadding / 2),
-                                  Text(
-                                    counter.toString(),
-                                    style: TextStyle(
-                                      color: Theme.of(context)
-                                          .textTheme
-                                          .bodyText1
-                                          ?.color,
-                                      fontSize: 20,
-                                    ),
-                                  ),
-                                  const SizedBox(width: kDefaultPadding / 2),
-                                  GestureDetector(
-                                    onTap: () {
-                                      setState(() {
-                                        if (counter < 10) {
-                                          counter++;
-                                        }
-                                      });
-                                    },
-                                    child: CircleAvatar(
-                                      radius: 18,
-                                      backgroundColor: Theme.of(context)
-                                          .scaffoldBackgroundColor,
-                                      child: Icon(
-                                        Icons.add,
-                                        color:
-                                            Theme.of(context).iconTheme.color,
-                                      ),
-                                    ),
-                                  ),
-                                ],
+                              Consumer(
+                                builder: (context, ref, child) {
+                                  final carts = ref.watch(cartsProvider);
+                                  if (!carts.keys
+                                      .toList()
+                                      .contains(widget.product)) {
+                                    return Row(
+                                      children: [
+                                        GestureDetector(
+                                          onTap: () {
+                                            setState(() {
+                                              if (counter > 1) {
+                                                counter--;
+                                              }
+                                            });
+                                          },
+                                          child: CircleAvatar(
+                                            radius: 18,
+                                            backgroundColor: Theme.of(context)
+                                                .scaffoldBackgroundColor,
+                                            child: Icon(
+                                              Icons.remove,
+                                              color: Theme.of(context)
+                                                  .iconTheme
+                                                  .color,
+                                            ),
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                            width: kDefaultPadding / 2),
+                                        Text(
+                                          counter.toString(),
+                                          style: TextStyle(
+                                            color: Theme.of(context)
+                                                .textTheme
+                                                .bodyText1
+                                                ?.color,
+                                            fontSize: 20,
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                            width: kDefaultPadding / 2),
+                                        GestureDetector(
+                                          onTap: () {
+                                            setState(() {
+                                              if (counter < 10) {
+                                                counter++;
+                                              }
+                                            });
+                                          },
+                                          child: CircleAvatar(
+                                            radius: 18,
+                                            backgroundColor: Theme.of(context)
+                                                .scaffoldBackgroundColor,
+                                            child: Icon(
+                                              Icons.add,
+                                              color: Theme.of(context)
+                                                  .iconTheme
+                                                  .color,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                                  } else {
+                                    return Row(
+                                      children: [
+                                        GestureDetector(
+                                          onTap: null,
+                                          child: CircleAvatar(
+                                            radius: 18,
+                                            backgroundColor: Theme.of(context)
+                                                .scaffoldBackgroundColor,
+                                            child: Icon(
+                                              Icons.remove,
+                                              color: Theme.of(context)
+                                                  .iconTheme
+                                                  .color,
+                                            ),
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                            width: kDefaultPadding / 2),
+                                        Text(
+                                          carts[widget.product].toString(),
+                                          style: TextStyle(
+                                            color: Theme.of(context)
+                                                .textTheme
+                                                .bodyText1
+                                                ?.color,
+                                            fontSize: 20,
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                            width: kDefaultPadding / 2),
+                                        GestureDetector(
+                                          onTap: null,
+                                          child: CircleAvatar(
+                                            radius: 18,
+                                            backgroundColor: Theme.of(context)
+                                                .scaffoldBackgroundColor,
+                                            child: Icon(
+                                              Icons.add,
+                                              color: Theme.of(context)
+                                                  .iconTheme
+                                                  .color,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                                  }
+                                },
                               )
                             ],
                           ),
@@ -379,7 +439,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           child: Consumer(
                             builder: (context, ref, child) {
                               final carts = ref.watch(cartsProvider);
-                              if (carts.keys.toList().contains(widget.product)) {
+                              if (carts.keys
+                                  .toList()
+                                  .contains(widget.product)) {
                                 return AppButton(
                                     text: 'Added to Cart',
                                     color: Colors.green,
