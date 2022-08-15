@@ -18,7 +18,6 @@ class SearchScreen extends ConsumerWidget {
           TextFormField(
             initialValue: ref.watch(keywordProvider),
             textInputAction: TextInputAction.search,
-            // controller: controller,
             onChanged: (String value) {
               ref.read(keywordProvider.notifier).state = value;
             },
