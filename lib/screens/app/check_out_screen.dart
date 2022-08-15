@@ -37,7 +37,6 @@ class _CheckOutScreenState extends ConsumerState<CheckOutScreen> {
                   notification: NotificationModel(
                     id: Random().nextInt(100),
                     type: 'Success',
-                    // uid: UserPreferencesController().uid,
                     product: key,
                     isRead: false,
                   ),
