@@ -148,7 +148,9 @@ class _FeedbackProductScreenState extends ConsumerState<FeedbackProductScreen> {
                 ),
               ),
               const SizedBox(height: kDefaultPadding * 1.5),
-              AppButton(text: 'Submit', onPressed: () {})
+              AppButton(text: 'Submit', onPressed: () {
+                Navigator.pop(context);
+              })
             ],
           ),
         ),

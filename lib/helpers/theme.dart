@@ -18,8 +18,7 @@ ThemeData lightThemeData(BuildContext context) {
           fontFamily: 'Mulish',
           bodyColor: Colors.black,
         ),
-    colorScheme: const ColorScheme.light(
-        primary: kPrimaryColor, secondary: kPrimaryColor),
+    colorScheme: const ColorScheme.light(secondary: Colors.transparent),
     bottomNavigationBarTheme: const BottomNavigationBarThemeData(
       backgroundColor: Colors.white,
       selectedIconTheme: IconThemeData(color: kPrimaryColor),
@@ -44,8 +43,8 @@ ThemeData darkThemeData(BuildContext context) {
           fontFamily: 'Mulish',
           bodyColor: Colors.white,
         ),
-    colorScheme: const ColorScheme.dark()
-        .copyWith(primary: kPrimaryColor, secondary: kPrimaryColor),
+    colorScheme:
+        const ColorScheme.dark().copyWith(secondary: Colors.transparent),
     bottomNavigationBarTheme: const BottomNavigationBarThemeData(
       backgroundColor: kScaffoldDarkColor,
       showUnselectedLabels: true,

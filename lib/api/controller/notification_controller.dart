@@ -18,7 +18,7 @@ class GetNotifications extends StateNotifier<List<NotificationModel>> {
   void delete({required NotificationModel notification}) {
     state = [
       for (final N in state)
-        if (N.id != N.id) N,
+        if (N.id != notification.id) N,
     ];
   }
 }

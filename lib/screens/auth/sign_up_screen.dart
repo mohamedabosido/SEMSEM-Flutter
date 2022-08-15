@@ -133,8 +133,7 @@ class _SignUpScreenState extends State<SignUpScreen> with Helpers {
                               loading = true;
                             });
                             if (await FbAuthController()
-                                .loginWithGoogle(context)) {
-                            }
+                                .loginWithGoogle(context)) {}
                           },
                           child: CircleAvatar(
                             radius: 30,
@@ -149,8 +148,7 @@ class _SignUpScreenState extends State<SignUpScreen> with Helpers {
                               loading = true;
                             });
                             if (await FbAuthController()
-                                .loginWithFacebook(context)) {
-                            }
+                                .loginWithFacebook(context)) {}
                           },
                           child: CircleAvatar(
                             radius: 30,
@@ -186,6 +184,13 @@ class _SignUpScreenState extends State<SignUpScreen> with Helpers {
     if (_emailController.text.isNotEmpty &&
         _passwordController.text.isNotEmpty &&
         _confirmPasswordController.text.isNotEmpty) {
+      if (!RegExp(
+              r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+          .hasMatch(_emailController.text)) {
+        showSnackBar(
+            context: context, message: 'Please Check the Email', error: true);
+        return false;
+      }
       if (_passwordController.text == _confirmPasswordController.text) {
         return true;
       } else {

@@ -1,6 +1,4 @@
 import 'dart:io';
-
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_profile_picture/flutter_profile_picture.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -10,12 +8,13 @@ import 'package:image_picker/image_picker.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:tokoto/constant/constant.dart';
 import 'package:tokoto/helpers/fb_storage_controller.dart';
+import 'package:tokoto/helpers/helpers.dart';
 import 'package:tokoto/prefs/user_preferences_controller.dart';
 import 'package:tokoto/widgets/app_button.dart';
 
 final profilePhotoProvider =
     FutureProvider.family<String, String>((ref, imageName) async {
-  return await FirebaseStorage.instance
+  return await FbStorage().storage
       .ref('/profile picture/$imageName')
       .getDownloadURL();
 });
@@ -29,124 +28,105 @@ class ProfilePictureWidget extends ConsumerStatefulWidget {
   ConsumerState createState() => _ProfilePictureWidgetState();
 }
 
-class _ProfilePictureWidgetState extends ConsumerState<ProfilePictureWidget> {
+class _ProfilePictureWidgetState extends ConsumerState<ProfilePictureWidget> with Helpers{
   @override
   Widget build(BuildContext context) {
-    final storage = FbStorage();
     final profilePic = ref.watch(profilePhotoProvider(
         'User-${UserPreferencesController().user.id}-ProfilePicture'));
-    return Stack(
-      children: [
-        profilePic.when(
-          data: (data) {
-            return CircleAvatar(
-              radius: 70,
-              backgroundImage: NetworkImage(data),
-              backgroundColor: Theme.of(context).backgroundColor,
-            );
-          },
-          error: (error, stack) {
-            return ProfilePicture(
-              name:
-                  '${UserPreferencesController().user.fName} ${UserPreferencesController().user.lName}',
-              radius: 70,
-              fontsize: 25,
-              count: 2,
-              random: false,
-            );
-          },
-          loading: () {
-            return Shimmer.fromColors(
-              baseColor: kOffOrangeColor,
-              highlightColor: Theme.of(context).backgroundColor,
-              child: const CircleAvatar(radius: 70),
-            );
-          },
-        ),
-        Positioned(
-          right: 0,
-          bottom: 0,
-          child: GestureDetector(
-            onTap: () async {
-              showDialog(
-                context: context,
-                builder: (context) => AlertDialog(
-                  backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-                  title: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      IconButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          icon: const Icon(Icons.close)),
-                      const Text('Choose an Option'),
-                    ],
-                  ),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20)),
-                  content: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      AppButton(
-                          text: 'Gallery',
-                          onPressed: () {
-                            pickImage(ImageSource.gallery)
-                                .whenComplete(() => cropImage())
-                                .then((value) => {
-                                      storage
-                                          .uploadImage(
-                                              path: croppedFile!.path,
-                                              fileName:
-                                                  'User-${UserPreferencesController().user.id}-ProfilePicture')
-                                          .then((value) => ref.refresh(
-                                              profilePhotoProvider(
-                                                  'User-${UserPreferencesController().user.id}-ProfilePicture')))
-                                    });
-                            Navigator.pop(context);
-                          }),
-                      const SizedBox(height: kDefaultPadding / 2),
-                      AppButton(
-                          text: 'Camera',
-                          onPressed: () {
-                            pickImage(ImageSource.camera)
-                                .whenComplete(() => cropImage())
-                                .then((value) => {
-                                      storage
-                                          .uploadImage(
-                                              path: croppedFile!.path,
-                                              fileName:
-                                                  'User-${UserPreferencesController().user.id}-ProfilePicture')
-                                          .then((value) => ref.refresh(
-                                              profilePhotoProvider(
-                                                  'User-${UserPreferencesController().user.id}-ProfilePicture')))
-                                    });
-                            Navigator.pop(context);
-                          }),
-                    ],
-                  ),
-                ),
+    return SizedBox(
+      width: 150,
+      height: 150,
+      child: Stack(
+        children: [
+          profilePic.when(
+            data: (data) {
+              return CircleAvatar(
+                radius: 70,
+                backgroundImage: NetworkImage(data),
+                backgroundColor: Theme.of(context).backgroundColor,
               );
             },
-            child: CircleAvatar(
-              radius: 23,
-              backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+            error: (error, stack) {
+              return ProfilePicture(
+                name:
+                    '${UserPreferencesController().user.fName} ${UserPreferencesController().user.lName}',
+                radius: 70,
+                fontsize: 25,
+                count: 2,
+                random: false,
+              );
+            },
+            loading: () {
+              return Shimmer.fromColors(
+                baseColor: kOffOrangeColor,
+                highlightColor: Theme.of(context).backgroundColor,
+                child: const CircleAvatar(radius: 70),
+              );
+            },
+          ),
+          Positioned(
+            right: 0,
+            bottom: 0,
+            child: GestureDetector(
+              onTap: () async {
+                showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                    title: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        IconButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            icon: const Icon(Icons.close)),
+                        const Text('Choose an Option'),
+                      ],
+                    ),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20)),
+                    content: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        AppButton(
+                            text: 'Gallery',
+                            onPressed: () {
+                              pickImage(ImageSource.gallery)
+                                  .whenComplete(() => cropImage());
+                            }),
+                        const SizedBox(height: kDefaultPadding / 2),
+                        AppButton(
+                            text: 'Camera',
+                            onPressed: () {
+                              pickImage(ImageSource.camera)
+                                  .whenComplete(() => cropImage());
+                            }),
+                      ],
+                    ),
+                  ),
+                );
+              },
               child: CircleAvatar(
-                radius: 20,
-                backgroundColor: Theme.of(context).backgroundColor,
-                child: SvgPicture.asset(
-                  'images/Camera Icon.svg',
-                  color: Theme.of(context)
-                      .textTheme
-                      .bodyText1
-                      ?.color
-                      ?.withOpacity(0.8),
+                radius: 23,
+                backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                child: CircleAvatar(
+                  radius: 20,
+                  backgroundColor: Theme.of(context).backgroundColor,
+                  child: SvgPicture.asset(
+                    'images/Camera Icon.svg',
+                    color: Theme.of(context)
+                        .textTheme
+                        .bodyText1
+                        ?.color
+                        ?.withOpacity(0.8),
+                  ),
                 ),
               ),
             ),
-          ),
-        )
-      ],
+          )
+        ],
+      ),
     );
   }
 
@@ -186,6 +166,17 @@ class _ProfilePictureWidgetState extends ConsumerState<ProfilePictureWidget> {
       setState(() {
         croppedFile = File(file.path);
       });
+      FbStorage()
+          .uploadImage(
+          path: croppedFile!.path,
+          fileName:
+          'User-${UserPreferencesController().user.id}-ProfilePicture')
+          .then((value) => ref.refresh(
+          profilePhotoProvider(
+              'User-${UserPreferencesController().user.id}-ProfilePicture')));
+      // ignore: use_build_context_synchronously
+      Navigator.pop(context);
+      showSnackBar(context: context, message: 'Uploaded Successfully , Please Wait ...');
     }
   }
 }

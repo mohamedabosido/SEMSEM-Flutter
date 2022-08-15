@@ -76,8 +76,8 @@ class FbAuthController with Helpers {
           .get();
       if (!snapshot.exists) {
         firestore.collection('users').doc(firebaseAuth.currentUser!.uid).set({
-          'fName': googleUser.displayName!,
-          'lName': '',
+          'fName': googleUser.displayName!.split(' ')[0],
+          'lName': googleUser.displayName!.split(' ')[1],
           'address': '',
           'phone': '',
         });
@@ -94,8 +94,8 @@ class FbAuthController with Helpers {
         UserModel user = UserModel(
           id: firebaseAuth.currentUser!.uid,
           email: googleUser.email,
-          fName: googleUser.displayName!,
-          lName: '',
+          fName: googleUser.displayName!.split(' ')[0],
+          lName: googleUser.displayName!.split(' ')[1],
           phone: '',
           address: '',
         );
@@ -140,16 +140,16 @@ class FbAuthController with Helpers {
         .get();
     if (!snapshot.exists) {
       firestore.collection('users').doc(firebaseAuth.currentUser!.uid).set({
-        'fName': userData['name'],
-        'lName': '',
+        'fName': userData['name'].toString().split(' ')[0],
+        'lName': userData['name'].toString().split(' ')[1],
         'address': '',
         'phone': '',
       });
       await UserApiController().register(
         id: firebaseAuth.currentUser!.uid,
         email: userData['email'],
-        fName: userData['name'],
-        lName: userData['name'],
+        fName: userData['name'].toString().split(' ')[0],
+        lName: userData['name'].toString().split(' ')[1],
         phone: 'Phone',
         address: 'Address',
         password: '12345678',
@@ -158,8 +158,8 @@ class FbAuthController with Helpers {
       UserModel user = UserModel(
         id: firebaseAuth.currentUser!.uid,
         email: userData['email'],
-        fName: userData['name'],
-        lName: '',
+        fName: userData['name'].toString().split(' ')[0],
+        lName: userData['name'].toString().split(' ')[1],
         phone: '',
         address: '',
       );
